@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "paths": {
-      "@components/*": ["./src/components/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@styles/*": ["./src/styles/*"]
+      "@components": ["./src/components"]
+      // "@styles/*": ["./src/styles/*"]
     },
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
