@@ -1,0 +1,42 @@
+.range {
+  display: flex;
+  min-height: 50px;
+  width: 70vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.range__label {
+  font-size: 1rem;
+}
+
+.range__slider {
+  height: 3px;
+  background-color: black;
+  width: 100%;
+  position: relative;
+  margin: 0.5rem;
+}
+
+.range__selector {
+  height: 20px;
+  width: 20px;
+  border-radius: 20px;
+  background-color: yellow;
+  border: 1px solid black;
+  position: absolute;
+  /* Top value: Half of height */
+  top: -10px;
+}
+
+.range__selector:hover {
+  cursor: pointer;
+}
+
+.range__selector.selector-min {
+  left: 0;
+}
+
+.range__selector.selector-max {
+  right: 0;
+}

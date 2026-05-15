@@ -1,0 +1,8 @@
+/* TODO: Download instead of @import */
+@import url("https://fonts.googleapis.com/css2?family=Finlandica+Text:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  font-family: "Finlandica Text", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
