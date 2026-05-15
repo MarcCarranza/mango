@@ -1,0 +1,26 @@
+{
+  "name": "mango-technical_test",
+  "version": "1.0.0",
+  "description": "Front-End technical test for Mango",
+  "license": "ISC",
+  "author": "Marc Carranza",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  },
+  "dependencies": {
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "25.8.0",
+    "@types/react": "19.2.14",
+    "typescript": "6.0.3"
+  }
+}
