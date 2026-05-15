@@ -7,4 +7,4 @@ dist
 .vscode
 # Next 
 .next
-next-end.d.ts
+next-env.d.ts
