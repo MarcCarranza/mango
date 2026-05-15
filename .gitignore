@@ -1,4 +1,10 @@
+# Node modules and lock file
 node_modules
 package-lock.json
-.next
+# Build output
 dist
+# VSCode
+.vscode
+# Next 
+.next
+next-end.d.ts
