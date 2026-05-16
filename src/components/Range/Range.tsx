@@ -9,6 +9,10 @@ import { RangeProps, RangeSelector } from "./types";
 // Styles
 // TODO: USE TAILWIND!!!!
 import "./style.css";
+import { getMinPositioning, getMaxPositioning } from "@utils";
+
+// Utils
+// TODO: Path
 
 function Range({ min, max }: RangeProps): React.ReactNode {
   // State
@@ -38,41 +42,46 @@ function Range({ min, max }: RangeProps): React.ReactNode {
       // Min and max values
       let minPosition;
       let maxPosition;
-      let sliderPosition;
       let selectorPosition;
       let selectorToUpdate;
       let positionToUpdate;
-      // TODO: This as an atomized function?
+
       if (currentSelector.current === RangeSelector.MIN) {
         // Assigning refs to update
         selectorToUpdate = minSelector;
         positionToUpdate = minSelectorPosition;
-        // Max and min positions
-        // TODO: This should take into account each selector positioning
-        minPosition = 0;
-        maxPosition =
-          slider.current.clientWidth - minSelector.current.clientWidth;
+        // Positioning values (max, min, slider and selector)
+        const positionValues = getMinPositioning({
+          sliderRef: slider,
+          minSelectorRef: minSelector,
+          clientX: e.clientX,
+          maxSelectorPosition,
+        });
 
-        // Calculating selector positioning based on slider
-        sliderPosition = e.clientX - slider.current.offsetLeft;
-        selectorPosition = sliderPosition - minSelector.current.clientWidth / 2;
+        minPosition = positionValues.minPosition;
+        maxPosition = positionValues.maxPosition;
+        selectorPosition = positionValues.selectorPosition;
       } else if (currentSelector.current === RangeSelector.MAX) {
         // Assigning refs to update
         selectorToUpdate = maxSelector;
         positionToUpdate = maxSelectorPosition;
         // Max and min positions
-        // TODO: This should take into account each selector positioning
-        minPosition =
-          -slider.current.clientWidth + maxSelector.current.clientWidth;
-        maxPosition = 0;
+        const positionValues = getMaxPositioning({
+          sliderRef: slider,
+          maxSelectorRef: maxSelector,
+          clientX: e.clientX,
+          minSelectorPosition,
+        });
 
-        sliderPosition = e.clientX - slider.current.clientWidth;
-        selectorPosition = sliderPosition - maxSelector.current.clientWidth * 2;
+        minPosition = positionValues.minPosition;
+        maxPosition = positionValues.maxPosition;
+        selectorPosition = positionValues.selectorPosition;
       } else {
         console.error("currentSelector value is null or undefined");
         return;
       }
 
+      // Checking min and max values before translation
       if (selectorPosition >= minPosition && selectorPosition <= maxPosition) {
         // Translating the slider
         positionToUpdate.current = selectorPosition;

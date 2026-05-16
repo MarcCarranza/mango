@@ -39,11 +39,11 @@
 
 .range__selector:hover {
   cursor: grab;
-  transform: scale(1.5);
 }
 
 .range__selector:active {
   cursor: grabbing;
+  z-index: 99;
 }
 
 .range__selector.selector-min {
