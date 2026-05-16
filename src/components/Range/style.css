@@ -8,6 +8,16 @@
 
 .range__label {
   font-size: 1rem;
+  width: 50px;
+}
+
+/* Slider */
+.range__slider-wrapper {
+  width: 100%;
+  position: relative;
+  height: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .range__slider {
@@ -15,7 +25,6 @@
   background-color: black;
   width: 100%;
   position: relative;
-  margin: 0.5rem;
 }
 
 .range__selector {
@@ -29,7 +38,12 @@
 }
 
 .range__selector:hover {
-  cursor: pointer;
+  cursor: grab;
+  transform: scale(1.5);
+}
+
+.range__selector:active {
+  cursor: grabbing;
 }
 
 .range__selector.selector-min {
