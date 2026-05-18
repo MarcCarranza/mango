@@ -1,8 +1,5 @@
-"use client";
-
 // Components
 import { Range } from "@components";
-import { useEffect, useState } from "react";
 
 type ExerciseOneData = {
   min: number;
@@ -12,7 +9,7 @@ type ExerciseOneData = {
 // TODO: This into utils?
 // TODO: Error handling
 async function getData(): Promise<ExerciseOneData | null> {
-  const res = await fetch("/api/minMax");
+  const res = await fetch("http://localhost:8080/api/minMax");
 
   if (!res.ok) {
     console.error("There was an error fetching the data");
@@ -22,24 +19,13 @@ async function getData(): Promise<ExerciseOneData | null> {
   return res.json();
 }
 
-export default function ExerciseOne(): React.ReactNode {
-  const [data, setData] = useState<ExerciseOneData | null>(null);
-
-  // TODO: Look into SSR instead of use client
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  // Fetch data
-  const fetchData = async () => {
-    const mockedValues = await getData();
-    setData(mockedValues);
-  };
+export default async function ExerciseOne(): Promise<React.ReactNode> {
+  const mockData = await getData();
 
   return (
     <main>
       <h1>Exercise 1</h1>
-      <Range {...data} />
+      <Range {...mockData} />
     </main>
   );
 }
