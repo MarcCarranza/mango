@@ -46,9 +46,10 @@ export const getMinPositioning = ({
   const minPosition = 0;
   // Taking into account maxSelector
   const maxPosition =
-    sliderWidth -
+    sliderWidth +
     maxSelectorPosition.current -
     minSelectorRef.current.clientWidth * 2;
+
   const selectorPosition =
     clientX - sliderOffset - minSelectorRef.current.clientWidth / 2;
 
