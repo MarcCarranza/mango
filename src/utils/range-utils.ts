@@ -1,5 +1,8 @@
 import { RefObject } from "react";
 
+// TODO: Types as a separate?
+import { RangeSelector } from "../components/Range/types";
+
 // TODO: TYPES!!!!
 interface MinPositionProps {
   sliderWidth: number;
@@ -17,7 +20,17 @@ interface MaxPositionProps {
   minSelectorPosition: { current: number };
 }
 
+interface PositionFromValueProps {
+  sliderWidth: number;
+  selectorType: RangeSelector;
+  selectorWidth: number;
+  value: number;
+  min: number;
+  max: number;
+}
+
 // EXERCISE 1
+// TODO: Return type
 export const getMinPositioning = ({
   sliderWidth,
   sliderOffset,
@@ -26,6 +39,7 @@ export const getMinPositioning = ({
   maxSelectorPosition,
 }: MinPositionProps) => {
   if (!minSelectorRef.current) {
+    // TODO: Handle this error
     console.error("getMinPositioning - minSelectorRef is null or undefined");
     return {};
   }
@@ -41,10 +55,11 @@ export const getMinPositioning = ({
   return {
     minPosition,
     maxPosition,
-    selectorPosition: Math.floor(selectorPosition),
+    selectorPosition: Math.round(selectorPosition),
   };
 };
 
+// TODO: Return type
 export const getMaxPositioning = ({
   sliderWidth,
   sliderOffset,
@@ -53,6 +68,7 @@ export const getMaxPositioning = ({
   minSelectorPosition,
 }: MaxPositionProps) => {
   if (!maxSelectorRef.current) {
+    // TODO: Handle this error
     console.error("getMaxPositioning - maxSelectorRef is null or undefined");
     return {};
   }
@@ -78,6 +94,23 @@ export const getMaxPositioning = ({
 
 export const getMinValueFromPercentage = () => {};
 
-export const getMinPositionFromValue = () => {};
+export const getPositionFromValue = ({
+  sliderWidth,
+  selectorType,
+  selectorWidth,
+  value,
+  min,
+  max,
+}: PositionFromValueProps): number => {
+  const sliderTotalWidth = sliderWidth - selectorWidth;
+  let percentage;
+  if (selectorType === RangeSelector.MIN) {
+    percentage = (value - min) / (max - min);
+  } else {
+    percentage = (value - max) / (max - min);
+  }
+  const updatedPosition = sliderTotalWidth * percentage;
+  return Math.round(updatedPosition);
+};
 
 // EXERCISE 2

@@ -9,7 +9,11 @@ import dynamic from "next/dynamic";
 import useElementSize from "../../hooks/useElementSize";
 
 // Utils
-import { getMinPositioning, getMaxPositioning } from "@utils";
+import {
+  getMinPositioning,
+  getMaxPositioning,
+  getPositionFromValue,
+} from "@utils";
 
 // Types
 import { RangeProps, RangeSelector } from "./types";
@@ -40,7 +44,11 @@ function Range({ min, max }: RangeProps): React.ReactNode {
   }, [min, max]);
 
   useEffect(() => {
-    // TODO: Reposition sliders based on width
+    // TODO: Optimize re-renders
+    // TODO: Don't calculate if values are min or max?
+    if (minSelector.current && maxSelector.current) {
+      onResize();
+    }
   }, [sliderWidth]);
 
   // Handlers
@@ -156,10 +164,14 @@ function Range({ min, max }: RangeProps): React.ReactNode {
     // TODO: Let null value?
     const value = parseFloat(e.currentTarget.value);
     if (value >= min && value < maxSelectorValue) {
-      // TODO: This as a constant?
-      const sliderTotalWidth = sliderWidth - minSelector.current.clientWidth;
-      const minPercentage = (value - min) / (max - min);
-      const minUpdatedPosition = sliderTotalWidth * minPercentage;
+      const minUpdatedPosition = getPositionFromValue({
+        sliderWidth,
+        selectorType: RangeSelector.MIN,
+        selectorWidth: minSelector.current.clientWidth,
+        value,
+        min,
+        max,
+      });
       minSelector.current.style.transform = `translate3d(${minUpdatedPosition}px, 0, 0)`;
       setMinSelectorValue(value);
     }
@@ -175,16 +187,47 @@ function Range({ min, max }: RangeProps): React.ReactNode {
     // TODO: Let null value?
     const value = parseFloat(e.currentTarget.value);
     if (value > minSelectorValue && value <= max) {
-      // TODO: This as a constant?
-      const sliderTotalWidth = sliderWidth - maxSelector.current.clientWidth;
-      const maxPercentage = (value - max) / (max - min);
-      const maxUpdatedPosition = sliderTotalWidth * maxPercentage;
+      const maxUpdatedPosition = getPositionFromValue({
+        sliderWidth,
+        selectorType: RangeSelector.MIN,
+        selectorWidth: maxSelector.current.clientWidth,
+        value,
+        min,
+        max,
+      });
       maxSelector.current.style.transform = `translate3d(${maxUpdatedPosition}px, 0, 0)`;
       setMaxSelectorValue(value);
     }
   };
 
-  const onResize = () => {};
+  const onResize = () => {
+    // TODO: Will this change with exercise 2?
+    if (!min || !max || !minSelector.current || !maxSelector.current) {
+      console.error("onResiz - No min, max or selector ref");
+      return;
+    }
+
+    const minResizePosition = getPositionFromValue({
+      sliderWidth,
+      selectorType: RangeSelector.MIN,
+      selectorWidth: minSelector.current.clientWidth,
+      value: minSelectorValue,
+      min,
+      max,
+    });
+
+    const maxResizePosition = getPositionFromValue({
+      sliderWidth,
+      selectorType: RangeSelector.MAX,
+      selectorWidth: minSelector.current.clientWidth,
+      value: maxSelectorValue,
+      min,
+      max,
+    });
+
+    minSelector.current.style.transform = `translate3d(${minResizePosition}px, 0, 0)`;
+    maxSelector.current.style.transform = `translate3d(${maxResizePosition}px, 0, 0)`;
+  };
 
   return (
     <div className="range">

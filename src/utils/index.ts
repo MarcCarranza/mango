@@ -1,3 +1,7 @@
-import { getMinPositioning, getMaxPositioning } from "./range-utils";
+import {
+  getMinPositioning,
+  getMaxPositioning,
+  getPositionFromValue,
+} from "./range-utils";
 
-export { getMinPositioning, getMaxPositioning };
+export { getMinPositioning, getMaxPositioning, getPositionFromValue };
