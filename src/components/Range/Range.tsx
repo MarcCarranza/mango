@@ -13,6 +13,7 @@ import {
   getMinPositioning,
   getMaxPositioning,
   getPositionFromValue,
+  getValueFromPosition,
 } from "@utils";
 
 // Types
@@ -106,9 +107,24 @@ function Range({ min, max }: RangeProps): React.ReactNode {
 
       // Checking min and max values before translation
       if (selectorPosition >= minPosition && selectorPosition <= maxPosition) {
-        // Translating the slider
+        const updatedValue = getValueFromPosition({
+          selectorPosition,
+          selectorType: currentSelector.current,
+          sliderWidth,
+          selectorWidth: selectorToUpdate.current.clientWidth,
+          min,
+          max,
+        });
+
+        // Animating the slider
         positionToUpdate.current = selectorPosition;
         selectorToUpdate.current.style.transform = `translate3d(${selectorPosition}px, 0, 0)`;
+
+        if (currentSelector.current === RangeSelector.MIN) {
+          setMinSelectorValue(updatedValue);
+        } else {
+          setMaxSelectorValue(updatedValue);
+        }
       }
     }
   };
@@ -123,33 +139,7 @@ function Range({ min, max }: RangeProps): React.ReactNode {
       console.error("onEndDragging - currentSelector is undefined/null");
       return;
     }
-    // TODO: This inside onMoveSlider?
-    // TODO: This into utils
-    if (currentSelector.current === RangeSelector.MIN && minSelector.current) {
-      // Calculating percentage slided
-      const minPercentage =
-        minSelectorPosition.current /
-        (sliderWidth - minSelector.current.clientWidth);
-      // For min & max (exercise 1)
-      if (min && max) {
-        const sum = Math.round((max - min) * minPercentage * 100) / 100;
-        const minValue = min + sum;
-        setMinSelectorValue(minValue);
-      }
-    } else if (
-      currentSelector.current === RangeSelector.MAX &&
-      maxSelector.current
-    ) {
-      const maxPercentage =
-        maxSelectorPosition.current /
-        (sliderWidth - maxSelector.current.clientWidth);
-      // For min & max (exercise 1)
-      if (min && max) {
-        const minus = Math.round((max - min) * maxPercentage * 100) / 100;
-        const maxValue = max + minus;
-        setMaxSelectorValue(maxValue);
-      }
-    }
+
     currentSelector.current = null;
     setDragging(false);
   };
@@ -203,7 +193,8 @@ function Range({ min, max }: RangeProps): React.ReactNode {
   const onResize = () => {
     // TODO: Will this change with exercise 2?
     if (!min || !max || !minSelector.current || !maxSelector.current) {
-      console.error("onResiz - No min, max or selector ref");
+      // TODO: Handle this differently
+      // console.error("onResize - No min, max or selector ref");
       return;
     }
 

@@ -92,7 +92,21 @@ export const getMaxPositioning = ({
   };
 };
 
-export const getMinValueFromPercentage = () => {};
+// TODO: Types
+export const getValueFromPosition = ({
+  selectorPosition,
+  selectorType,
+  sliderWidth,
+  selectorWidth,
+  min,
+  max,
+}) => {
+  // Calculating percentage slided
+  const percentage = selectorPosition / (sliderWidth - selectorWidth);
+  const sum = Math.round((max - min) * percentage * 100) / 100;
+  const value = selectorType === RangeSelector.MIN ? min + sum : max + sum;
+  return value;
+};
 
 export const getPositionFromValue = ({
   sliderWidth,
