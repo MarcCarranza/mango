@@ -156,12 +156,11 @@ function Range({ min, max }: RangeProps): React.ReactNode {
     // TODO: Let null value?
     const value = parseFloat(e.currentTarget.value);
     if (value >= min && value < maxSelectorValue) {
-      // const sliderWidth =
-      //   slider.current.clientWidth -
-      //   slider.current.offsetLeft +
-      //   minSelector.current.clientWidth;
-      // const minUpdatedPosition = (value / max) * sliderWidth;
-      // minSelector.current.style.transform = `translate3d(${minUpdatedPosition}px, 0, 0)`;
+      // TODO: This as a constant?
+      const sliderTotalWidth = sliderWidth - minSelector.current.clientWidth;
+      const minPercentage = (value - min) / (max - min);
+      const minUpdatedPosition = sliderTotalWidth * minPercentage;
+      minSelector.current.style.transform = `translate3d(${minUpdatedPosition}px, 0, 0)`;
       setMinSelectorValue(value);
     }
   };
@@ -176,16 +175,16 @@ function Range({ min, max }: RangeProps): React.ReactNode {
     // TODO: Let null value?
     const value = parseFloat(e.currentTarget.value);
     if (value > minSelectorValue && value <= max) {
-      // TODO: This as a constant
-      // const sliderWidth =
-      //   slider.current.clientWidth -
-      //   slider.current.offsetLeft +
-      //   maxSelector.current.clientWidth;
-      // const maxUpdatedPosition = (value / max) * sliderWidth - sliderWidth;
-      // maxSelector.current.style.transform = `translate3d(${maxUpdatedPosition}px, 0, 0)`;
+      // TODO: This as a constant?
+      const sliderTotalWidth = sliderWidth - maxSelector.current.clientWidth;
+      const maxPercentage = (value - max) / (max - min);
+      const maxUpdatedPosition = sliderTotalWidth * maxPercentage;
+      maxSelector.current.style.transform = `translate3d(${maxUpdatedPosition}px, 0, 0)`;
       setMaxSelectorValue(value);
     }
   };
+
+  const onResize = () => {};
 
   return (
     <div className="range">
