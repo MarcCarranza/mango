@@ -9,6 +9,13 @@
 .range__label {
   font-size: 1rem;
   width: 50px;
+  min-width: 50px;
+}
+
+.range__input {
+  width: 50px;
+  padding: 0;
+  border: none;
 }
 
 /* Slider */
@@ -21,8 +28,9 @@
 }
 
 .range__slider {
-  height: 3px;
-  background-color: black;
+  height: 5px;
+  border-radius: 5px;
+  background-color: rgb(100, 100, 100);
   width: 100%;
   position: relative;
 }
@@ -31,10 +39,12 @@
   height: 20px;
   width: 20px;
   border-radius: 20px;
-  border: 1px solid black;
   position: absolute;
   /* Top value: Half of height */
-  top: -10px;
+  top: -8px;
+  box-shadow: -1px -1px 3px -1px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: -1px -1px 3px -1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: -1px -1px 3px -1px rgba(0, 0, 0, 0.5);
 }
 
 .range__selector:hover {
@@ -48,10 +58,10 @@
 
 .range__selector.selector-min {
   left: 0px;
-  background-color: red;
+  background-color: rgb(250, 160, 40);
 }
 
 .range__selector.selector-max {
   right: 0px;
-  background-color: blue;
+  background-color: rgb(20, 173, 194);
 }

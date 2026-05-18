@@ -1,7 +1,10 @@
 "use client";
 
 // Dependencies
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+
+// Utils
+import { getMinPositioning, getMaxPositioning } from "@utils";
 
 // Types
 import { RangeProps, RangeSelector } from "./types";
@@ -9,10 +12,8 @@ import { RangeProps, RangeSelector } from "./types";
 // Styles
 // TODO: USE TAILWIND!!!!
 import "./style.css";
-import { getMinPositioning, getMaxPositioning } from "@utils";
 
-// Utils
-// TODO: Path
+// TODO: Standarize slider/selector positioning
 
 function Range({ min, max }: RangeProps): React.ReactNode {
   // State
@@ -35,6 +36,7 @@ function Range({ min, max }: RangeProps): React.ReactNode {
   const onMoveSlider = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ): void => {
+    // EXERCISE 1
     if (!isDragging || !slider.current) {
       return;
     }
@@ -102,18 +104,17 @@ function Range({ min, max }: RangeProps): React.ReactNode {
       );
       return;
     }
+    // TODO: This inside onMoveSlider?
+    // TODO: This into utils
     if (currentSelector.current === RangeSelector.MIN && minSelector.current) {
       // Calculating percentage slided
       const minPercentage =
         minSelectorPosition.current /
         (slider.current.clientWidth - minSelector.current.clientWidth);
       // For min & max (exercise 1)
-      // TODO: This
       if (min && max) {
         const minValue = Math.round(max * minPercentage * 100) / 100;
         setMinSelectorValue(minValue);
-      } else {
-        // For array of values (exercise 2)
       }
     } else if (
       currentSelector.current === RangeSelector.MAX &&
@@ -126,18 +127,68 @@ function Range({ min, max }: RangeProps): React.ReactNode {
       if (min && max) {
         const maxValue = Math.round(max * (1 + maxPercentage) * 100) / 100;
         setMaxSelectorValue(maxValue);
-      } else {
-        // For array of values (exercise 2)
       }
     }
     currentSelector.current = null;
     setDragging(false);
   };
 
+  const onChangeMinInput = (
+    e: ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) => {
+    if (!min || !max || !minSelector.current || !slider.current) {
+      console.error("No min, max, selector ref or slider ref");
+      return;
+    }
+    // TODO: Let null value?
+    const value = parseFloat(e.currentTarget.value);
+    if (value >= min && value < maxSelectorValue) {
+      const sliderWidth =
+        slider.current.clientWidth -
+        slider.current.offsetLeft +
+        minSelector.current.clientWidth;
+      const minUpdatedPosition = (value / max) * sliderWidth;
+      minSelector.current.style.transform = `translate3d(${minUpdatedPosition}px, 0, 0)`;
+      setMinSelectorValue(value);
+    }
+  };
+
+  const onChangeMaxInput = (
+    e: ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) => {
+    if (!min || !max || !maxSelector.current || !slider.current) {
+      console.error("No min, max, selector ref or slider ref");
+      return;
+    }
+    // TODO: Let null value?
+    const value = parseFloat(e.currentTarget.value);
+    if (value > minSelectorValue && value <= max) {
+      // TODO: This as a constant
+      const sliderWidth =
+        slider.current.clientWidth -
+        slider.current.offsetLeft +
+        maxSelector.current.clientWidth;
+      const maxUpdatedPosition = (value / max) * sliderWidth - sliderWidth;
+      maxSelector.current.style.transform = `translate3d(${maxUpdatedPosition}px, 0, 0)`;
+      setMaxSelectorValue(value);
+    }
+  };
+
   return (
     <div className="range">
       {/* Min value label */}
-      <span className="range__label">{minSelectorValue ?? min}</span>
+      {typeof min === "number" ? (
+        <input
+          type="number"
+          className="range__input"
+          value={minSelectorValue}
+          onChange={onChangeMinInput}
+          step="0.01"
+        />
+      ) : (
+        <span className="range__label">{minSelectorValue}</span>
+      )}
+
       {/* Slider */}
       <div
         className="range__slider-wrapper"
@@ -162,7 +213,17 @@ function Range({ min, max }: RangeProps): React.ReactNode {
         </div>
       </div>
       {/* Max value label */}
-      <span className="range__label">{maxSelectorValue ?? max}</span>
+      {typeof min === "number" ? (
+        <input
+          className="range__input"
+          type="number"
+          value={maxSelectorValue}
+          onChange={onChangeMaxInput}
+          step="0.01"
+        />
+      ) : (
+        <span className="range__label">{maxSelectorValue}</span>
+      )}
     </div>
   );
 }

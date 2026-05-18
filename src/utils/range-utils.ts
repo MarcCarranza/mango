@@ -1,3 +1,6 @@
+// TODO: TYPES!!!!
+
+// EXERCISE 1
 export const getMinPositioning = ({
   sliderRef,
   minSelectorRef,
@@ -46,3 +49,9 @@ export const getMaxPositioning = ({
     selectorPosition,
   };
 };
+
+export const getMinValueFromPercentage = () => {};
+
+export const getMinPositionFromValue = () => {};
+
+// EXERCISE 2
