@@ -1,3 +1,3 @@
 export async function GET() {
-  return Response.json({ min: 1, max: 100 });
+  return Response.json({ min: 50, max: 100 });
 }

@@ -1,52 +1,78 @@
+import { RefObject } from "react";
+
 // TODO: TYPES!!!!
+interface MinPositionProps {
+  sliderWidth: number;
+  sliderOffset: number;
+  minSelectorRef: RefObject<HTMLDivElement | null>;
+  clientX: number;
+  maxSelectorPosition: { current: number };
+}
+
+interface MaxPositionProps {
+  sliderWidth: number;
+  sliderOffset: number;
+  maxSelectorRef: RefObject<HTMLDivElement | null>;
+  clientX: number;
+  minSelectorPosition: { current: number };
+}
 
 // EXERCISE 1
 export const getMinPositioning = ({
-  sliderRef,
+  sliderWidth,
+  sliderOffset,
   minSelectorRef,
   clientX,
   maxSelectorPosition,
-}) => {
+}: MinPositionProps) => {
+  if (!minSelectorRef.current) {
+    console.error("getMinPositioning - minSelectorRef is null or undefined");
+    return {};
+  }
   const minPosition = 0;
   // Taking into account maxSelector
   const maxPosition =
-    sliderRef.current.clientWidth +
+    sliderWidth -
     maxSelectorPosition.current -
-    sliderRef.current.offsetLeft +
-    minSelectorRef.current.clientWidth / 2;
-  const sliderPosition = clientX - sliderRef.current.offsetLeft;
+    minSelectorRef.current.clientWidth * 2;
   const selectorPosition =
-    sliderPosition - minSelectorRef.current.clientWidth / 2;
+    clientX - sliderOffset - minSelectorRef.current.clientWidth / 2;
 
   return {
     minPosition,
     maxPosition,
-    selectorPosition,
+    selectorPosition: Math.floor(selectorPosition),
   };
 };
 
 export const getMaxPositioning = ({
-  sliderRef,
+  sliderWidth,
+  sliderOffset,
   maxSelectorRef,
   clientX,
   minSelectorPosition,
-}) => {
+}: MaxPositionProps) => {
+  if (!maxSelectorRef.current) {
+    console.error("getMaxPositioning - maxSelectorRef is null or undefined");
+    return {};
+  }
   // Taking into account minSelector
   const minPosition =
-    -sliderRef.current.clientWidth +
+    -sliderWidth +
     minSelectorPosition.current +
-    sliderRef.current.offsetLeft -
-    maxSelectorRef.current.clientWidth / 2;
+    maxSelectorRef.current.clientWidth * 2;
   const maxPosition = 0;
 
-  const sliderPosition = clientX - sliderRef.current.clientWidth;
   const selectorPosition =
-    sliderPosition - maxSelectorRef.current.clientWidth * 2;
+    clientX -
+    sliderWidth -
+    sliderOffset +
+    maxSelectorRef.current.clientWidth / 2;
 
   return {
     minPosition,
     maxPosition,
-    selectorPosition,
+    selectorPosition: Math.round(selectorPosition),
   };
 };
 
