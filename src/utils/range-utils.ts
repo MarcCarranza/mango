@@ -1,33 +1,11 @@
-import { RefObject } from "react";
-
-// TODO: Types as a separate?
-import { RangeSelector } from "../components/Range/types";
+import {
+  RangeSelector,
+  MinPositionParams,
+  MaxPositionParams,
+  PositionFromValueParams,
+} from "@customTypes/Range";
 
 // TODO: TYPES!!!!
-interface MinPositionProps {
-  sliderWidth: number;
-  sliderOffset: number;
-  minSelectorRef: RefObject<HTMLDivElement | null>;
-  clientX: number;
-  maxSelectorPosition: { current: number };
-}
-
-interface MaxPositionProps {
-  sliderWidth: number;
-  sliderOffset: number;
-  maxSelectorRef: RefObject<HTMLDivElement | null>;
-  clientX: number;
-  minSelectorPosition: { current: number };
-}
-
-interface PositionFromValueProps {
-  sliderWidth: number;
-  selectorType: RangeSelector;
-  selectorWidth: number;
-  value: number;
-  min: number;
-  max: number;
-}
 
 // EXERCISE 1
 // TODO: Return type
@@ -37,7 +15,7 @@ export const getMinPositioning = ({
   minSelectorRef,
   clientX,
   maxSelectorPosition,
-}: MinPositionProps) => {
+}: MinPositionParams) => {
   if (!minSelectorRef.current) {
     // TODO: Handle this error
     console.error("getMinPositioning - minSelectorRef is null or undefined");
@@ -67,7 +45,7 @@ export const getMaxPositioning = ({
   maxSelectorRef,
   clientX,
   minSelectorPosition,
-}: MaxPositionProps) => {
+}: MaxPositionParams) => {
   if (!maxSelectorRef.current) {
     // TODO: Handle this error
     console.error("getMaxPositioning - maxSelectorRef is null or undefined");
@@ -93,7 +71,6 @@ export const getMaxPositioning = ({
   };
 };
 
-// TODO: Types
 export const getValueFromPosition = ({
   selectorPosition,
   selectorType,
@@ -101,7 +78,7 @@ export const getValueFromPosition = ({
   selectorWidth,
   min,
   max,
-}) => {
+}): number => {
   // Calculating percentage slided
   const percentage = selectorPosition / (sliderWidth - selectorWidth);
   const sum = Math.round((max - min) * percentage * 100) / 100;
@@ -116,7 +93,7 @@ export const getPositionFromValue = ({
   value,
   min,
   max,
-}: PositionFromValueProps): number => {
+}: PositionFromValueParams): number => {
   const sliderTotalWidth = sliderWidth - selectorWidth;
   let percentage;
   if (selectorType === RangeSelector.MIN) {

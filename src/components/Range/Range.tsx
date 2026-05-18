@@ -5,8 +5,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 // Hooks
-// TODO: PATH
-import useElementSize from "../../hooks/useElementSize";
+import { useElementSize } from "@hooks";
 
 // Utils
 import {
@@ -17,7 +16,7 @@ import {
 } from "@utils";
 
 // Types
-import { RangeProps, RangeSelector } from "./types";
+import { RangeProps, RangeSelector } from "@customTypes/Range";
 
 // Styles
 // TODO: USE TAILWIND!!!!
